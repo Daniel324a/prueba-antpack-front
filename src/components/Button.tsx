@@ -17,6 +17,17 @@ export const Button = ({ onClick, text = '', className = '', disabled = false, t
   </button>
 );
 
+Button.Round = ({ onClick, text = '', className = '', disabled = false, type = 'button' }: ButtonProps) => (
+  <button
+    type={type}
+    disabled={disabled}
+    className={className + buttons.round + (disabled && buttons.disabled) + animateTransforms}
+    onClick={onClick}
+  >
+    {text}
+  </button>
+);
+
 Button.Link = ({ path = '/', text = '', className = '', disabled = false }: ButtonLinkProps) => (
   <Link
     to={disabled ? '#' : path}

@@ -25,7 +25,7 @@ const styles = {
       flex-shrink-0 hover:bg-gray-200  
     `,
   },
-  card: ' bg-white flex flex-col items-center p-10 rounded-lg flex-grow-0 flex-shrink-0 h-max w-full text-center overflow-hidden hover:shadow-lg sm:w-72 ',
+  card: ' bg-white flex flex-col items-center p-10 pb-5 rounded-lg flex-grow-0 flex-shrink-0 h-max w-full text-center overflow-hidden hover:shadow-lg sm:w-72 ',
   container: ` flex flex-col flex-grow gap-1 overflow-y-auto p-5 sm:p-10 `,
   textField: ` 
     outline outline-2 outline-gray-200 
