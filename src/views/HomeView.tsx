@@ -21,7 +21,7 @@ export const HomeView = () => {
     doUpdate();
   };
 
-  const handleUserClick = (user: User) => showUserDialog(user);
+  const handleUserClick = (user: User) => showUserDialog(user, doUpdate);
   const handleUserAction = (id: string) => showDeleteDialog('users', id).then(isDeleted => isDeleted && doUpdate());
 
   return (

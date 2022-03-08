@@ -1,6 +1,6 @@
 const styles = {
   alerts: {
-    user: 'flex flex-col gap-1.5 items-center pb-5 text-gray-600 font-light text-xl',
+    user: 'flex flex-col gap-1.5 items-center pb-5 text-gray-600 font-light text-xl relative',
   },
   animateTransforms: ' transition-all transform duration-200 ',
   animateTransforms100: ' transition-all transform duration-100 ',
@@ -28,7 +28,14 @@ const styles = {
       flex-shrink-0 hover:bg-gray-200  
     `,
   },
-  card: ' bg-white flex flex-col items-center p-10 pb-5 rounded-lg flex-grow-0 flex-shrink-0 h-max w-full text-center overflow-hidden hover:shadow-lg sm:w-72 ',
+  card: `
+    bg-white flex flex-col items-center 
+    p-10 pb-5 rounded-lg h-max w-full
+    flex-grow-0 flex-shrink-0 
+    text-center overflow-hidden 
+    hover:shadow-lg sm:w-72 
+    animate__animated animate__zoomIn animate__faster
+  `,
   container: ` flex flex-col flex-grow gap-1 overflow-y-auto p-5 sm:p-10 `,
   roundedImage: ' w-4/5 rounded-full object-cover ',
   textField: ` 
@@ -40,7 +47,7 @@ const styles = {
   users: {
     container: ' flex flex-wrap gap-5 justify-center flex-grow overflow-y-auto mt-20 p-5 sm:p-10 ',
   },
-  view: ' flex flex-col h-screen white w-screen overflow-hidden ',
+  view: ' flex flex-col h-screen white w-screen overflow-hidden animate__animated animate__fadeIn animate__fast ',
 };
 
 export default styles;

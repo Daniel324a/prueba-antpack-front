@@ -9,6 +9,7 @@ import { User } from '../interfaces/user';
 import { Address } from '../interfaces/address';
 import { Company } from '../interfaces/company';
 import { api } from './globals';
+import { UpdateUserForm } from '../components/dialogs/UpdateUserForm';
 
 const ReactSwal = withReactContent(Swal);
 const loader = require('../assets/pulse_loader.gif');
@@ -57,12 +58,18 @@ export const showWarningToast = (warn: string) =>
     timer: 2000,
   }).then(_ => false);
 
-export const showUserDialog = (user: User) =>
+export const showUserDialog = (user: User, doUpdate: () => void) =>
   ReactSwal.fire({
     title: user.name,
-    html: <UserShowcase user={user} />,
+    html: <UserShowcase user={user} swal={ReactSwal} updateUsers={doUpdate} />,
     showConfirmButton: false,
     showCloseButton: true,
+    showClass: {
+      popup: 'animate__animated animate__slideInUp animate__faster',
+    },
+    hideClass: {
+      popup: 'animate__animated animate__fadeOutUp',
+    },
   });
 
 // Functionality Dialogs
@@ -169,4 +176,51 @@ export const showAddCompanyDialog = async (): Promise<boolean> => {
     .catch(err => showErrorDialog(err));
 
   return isCreated;
+};
+
+export const showUpdateUserDialog = async (user: User): Promise<boolean> => {
+  const { value: updatedUser } = await ReactSwal.fire({
+    width: '40rem',
+    html: <UpdateUserForm user={user} swal={ReactSwal} />,
+    focusConfirm: false,
+    showConfirmButton: false,
+    showCloseButton: true,
+    preConfirm: (): User => ({
+      name: (document.getElementById('swal-us-name') as HTMLInputElement).value,
+      username: (document.getElementById('swal-us-username') as HTMLInputElement).value,
+      phone: (document.getElementById('swal-us-phone') as HTMLInputElement).value,
+      email: (document.getElementById('swal-us-email') as HTMLInputElement).value,
+      website: (document.getElementById('swal-us-website') as HTMLInputElement).value,
+    }),
+    showClass: {
+      popup: 'animate__animated animate__slideInLeft animate__faster',
+    },
+    hideClass: {
+      popup: 'animate__animated animate__slideOutRight animate__faster',
+    },
+  });
+
+  if (!updatedUser) {
+    setTimeout(() => showWarningToast('User not updated.'), 350);
+    return false;
+  }
+
+  // Show loading Dialog
+  showLoadingDialog();
+
+  // Fetch update user API
+  const isUpdated = await fetch(`${api}users/${user._id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updatedUser),
+  })
+    .then(res => res.json())
+    .then(response => {
+      if (!response.ok) return showErrorDialog(response.msg);
+
+      return showSuccessDialog('Success', 'User updated successfully.');
+    })
+    .catch(err => showErrorDialog(err));
+
+  return isUpdated;
 };
