@@ -43,7 +43,8 @@ const styles = {
     -outline-offset-2 rounded-md p-2 w-full
     hover:bg-gray-100 focus:outline-gray-400 
   `,
-  topBar: ' flex h-20 w-full gap-1.5 p-5 items-center bg-white shadow-lg fixed z-50 overflow-hidden sm:gap-3 ',
+  topBar:
+    ' flex h-20 w-full gap-1.5 p-5 items-center bg-white shadow-lg fixed z-50 overflow-hidden sm:gap-3 animate__animated animate__faster animate__fadeInDown ',
   users: {
     container: ' flex flex-wrap gap-5 justify-center flex-grow overflow-y-auto mt-20 p-5 sm:p-10 ',
   },
