@@ -2,6 +2,8 @@
 
 Software bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Note: This app was developed using [React](https://reactjs.org/) `17.0.2` and [Typescript](https://www.typescriptlang.org/) `4.6.2`
+
 ## Project Structure
 
 ```
