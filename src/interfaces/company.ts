@@ -6,3 +6,9 @@ export interface Company {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface CompanyResponse {
+  ok: boolean;
+  count: number;
+  companies: Company[];
+}

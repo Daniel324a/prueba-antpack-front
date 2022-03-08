@@ -18,8 +18,20 @@ export const Button = ({ onClick, text = '', className = '', disabled = false, t
 );
 
 Button.Link = ({ path = '/', text = '', className = '', disabled = false }: ButtonLinkProps) => (
-  <Link to={path} className={className + buttons.outlined + (disabled && buttons.disabledOutlined) + animateTransforms}>
+  <Link
+    to={disabled ? '#' : path}
+    className={className + buttons.outlined + (disabled && buttons.disabledOutlined) + animateTransforms}
+  >
     {text}
+  </Link>
+);
+
+Button.NavIcon = ({ path = '/', icon = '', className = '', disabled = false }: ButtonNavIconProps) => (
+  <Link
+    to={disabled ? '#' : path}
+    className={className + buttons.round + (disabled && buttons.disabledRound) + animateTransforms}
+  >
+    {icon}
   </Link>
 );
 
@@ -31,9 +43,10 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
 }
 
-interface ButtonLinkProps {
+interface ButtonLinkProps extends Omit<ButtonProps, 'onClick' | 'type'> {
   path: string;
-  text?: string | JSX.Element;
-  className?: string;
-  disabled?: boolean;
+}
+
+interface ButtonNavIconProps extends Omit<ButtonLinkProps, 'text'> {
+  icon: string | JSX.Element;
 }

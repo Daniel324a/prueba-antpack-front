@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { UserCard } from '../components/UserCard';
-import { UserSearchField } from '../components/UserSearchField';
+import { TopBar } from '../components/TopBar';
 
 import { useFetch } from '../hooks/useFetch';
 import { UserResponse } from '../interfaces/user';
@@ -22,7 +22,7 @@ export const HomeView = () => {
 
   return (
     <div className={view}>
-      <UserSearchField onSearch={handleSearch} disabled={loading} />
+      <TopBar.SearchUsers onSearch={handleSearch} disabled={loading} />
       <div className={users.container}>
         {!loading && response?.users.map(user => <UserCard key={user._id} user={user} />)}
       </div>

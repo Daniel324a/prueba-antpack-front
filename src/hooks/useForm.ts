@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useForm = (initialState: any, callback?: Function) => {
+export const useForm = <T>(initialState: T, callback?: Function) => {
   const [form, setForm] = useState(initialState);
 
   const clear = () => setForm(initialState);

@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, HTMLInputTypeAttribute } from 'react';
 
 import styles from '../styles/';
 
@@ -16,7 +16,7 @@ export const TextField = ({
   required = false,
 }: TextFieldProps) => {
   return (
-    <div className='flex flex-col w-full'>
+    <div className='w-full flex-grow'>
       {label && <label className='text-gray-500'>{label}</label>}
       <input
         className={textField + animateTransforms}
@@ -36,7 +36,7 @@ export const TextField = ({
 interface TextFieldProps {
   name: string;
   value: string | number;
-  type?: string;
+  type?: HTMLInputTypeAttribute;
   label?: string;
   disabled?: boolean;
   required?: boolean;

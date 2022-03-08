@@ -7,3 +7,9 @@ export interface Address {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface AddressResponse {
+  ok: boolean;
+  count: number;
+  addresses: Address[];
+}
