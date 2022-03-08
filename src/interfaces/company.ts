@@ -1,10 +1,10 @@
 export interface Company {
-  _id: string;
+  _id?: string;
   name: string;
   catchPhrase: string;
   bs: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface CompanyResponse {

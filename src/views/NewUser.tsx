@@ -8,8 +8,8 @@ import { User } from '../interfaces/user';
 
 import styles from '../styles/index';
 import { AddressesSelect } from '../components/AddressesSelect';
+import { showErrorDialog, showWarningToast, showSuccessDialog, showLoadingDialog } from '../utils/SweetAlerts';
 import { api } from '../utils/globals';
-import { showErrorDialog, showWarningToast, showSuccessDialog } from '../utils/SweetAlerts';
 
 const { view, container } = styles;
 
@@ -26,6 +26,9 @@ export const NewUser = () => {
 
     // Check company and address fields
     if (!company || !address) return showWarningToast('Please fill in all fields to create a new user.');
+
+    // Show loading Dialog
+    showLoadingDialog();
 
     // Fetch create user API
     fetch(`${api}users`, {

@@ -1,11 +1,11 @@
 export interface Address {
-  _id: string;
+  _id?: string;
   street: string;
   suite: string;
   city: string;
   zipCode: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface AddressResponse {

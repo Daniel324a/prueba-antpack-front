@@ -1,19 +1,36 @@
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { DeleteRounded } from '@material-ui/icons';
 
-import { Button } from '../components/Button';
+import { AddressForm } from '../components/dialogs/AddressForm';
+import { CompanyForm } from '../components/dialogs/CompanyForm';
+import { UserShowcase } from '../components/dialogs/UserShowcase';
 
 import { User } from '../interfaces/user';
-import { api } from './globals';
-import { Company } from '../interfaces/company';
 import { Address } from '../interfaces/address';
+import { Company } from '../interfaces/company';
+import { api } from './globals';
 
 const ReactSwal = withReactContent(Swal);
+const loader = require('../assets/pulse_loader.gif');
 
-export const showErrorDialog = (err: any) =>
+// Layout Only Dialogs
+export const showLoadingDialog = () =>
   ReactSwal.fire({
-    title: 'Error Creating the User',
+    html: (
+      <div className='flex flex-col pb-5 items-center justify-center text-xl text-center'>
+        <img src={loader} alt='loader' />
+        <code className='-mt-12'>Loading</code>
+      </div>
+    ),
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    allowEnterKey: false,
+    allowEscapeKey: false,
+  }).then(_ => false);
+
+export const showErrorDialog = (err: any, title = 'Error Creating the User') =>
+  ReactSwal.fire({
+    title,
     html: (
       <p className='text-gray-400'>
         {err}
@@ -38,8 +55,17 @@ export const showWarningToast = (warn: string) =>
     toast: true,
     timerProgressBar: true,
     timer: 2000,
+  }).then(_ => false);
+
+export const showUserDialog = (user: User) =>
+  ReactSwal.fire({
+    title: user.name,
+    html: <UserShowcase user={user} />,
+    showConfirmButton: false,
+    showCloseButton: true,
   });
 
+// Functionality Dialogs
 export const showDeleteDialog = async (endpoint: string, id: string): Promise<boolean> => {
   const { isConfirmed } = await ReactSwal.fire({
     title: 'Are you sure?',
@@ -52,6 +78,9 @@ export const showDeleteDialog = async (endpoint: string, id: string): Promise<bo
   });
 
   if (!isConfirmed) return false;
+
+  // Show loading Dialog
+  showLoadingDialog();
 
   // Fetch delete API
   const isDeleted = await fetch(`${api}${endpoint}/${id}`, {
@@ -69,43 +98,75 @@ export const showDeleteDialog = async (endpoint: string, id: string): Promise<bo
   return isDeleted;
 };
 
-export const showUserDialog = ({ _id, name, email, username, phone, address, company, gravatar, website }: User) =>
-  ReactSwal.fire({
-    title: name,
-    html: (
-      <div className='flex flex-col gap-1.5 items-center pb-5 text-gray-600 font-light text-xl'>
-        <img src={gravatar} alt={_id + '-pic'} className='rounded-full object-cover w-4/5 my-4' />
-        <div>
-          <p className='font-medium'>Username:</p>
-          <p>{username}</p>
-        </div>
-        <div>
-          <p className='font-medium'>Email:</p>
-          <p>{email}</p>
-        </div>
-
-        <div className='mt-2'>
-          <p className='font-medium'>Phone:</p>
-          <p>{phone}</p>
-        </div>
-        <div>
-          <p className='font-medium'>Address:</p>
-          <p>
-            {(address as Address).city}, {(address as Address).street}
-          </p>
-        </div>
-
-        <div className='mt-2'>
-          <p className='font-medium'>On:</p>
-          <p>{(company as Company).name}</p>
-        </div>
-
-        <div className='mt-2'>
-          <p className='font-medium'>Website:</p>
-          <p className='text-gray-400'>{website}</p>
-        </div>
-      </div>
-    ),
+export const showAddAddressDialog = async (): Promise<boolean> => {
+  const { value: address } = await ReactSwal.fire({
+    title: 'New Address',
+    html: <AddressForm swal={ReactSwal} />,
+    focusConfirm: false,
+    preConfirm: (): Address => ({
+      city: '' + (document.getElementById('swal-add-city') as HTMLInputElement).value,
+      street: '' + (document.getElementById('swal-add-street') as HTMLInputElement).value,
+      suite: '' + (document.getElementById('swal-add-suite') as HTMLInputElement).value,
+      zipCode: '' + (document.getElementById('swal-add-zip') as HTMLInputElement).value,
+    }),
     showConfirmButton: false,
     showCloseButton: true,
   });
+
+  if (!address) return showWarningToast('Address not created.');
+
+  // Show loading Dialog
+  showLoadingDialog();
+
+  // Fetch create address API
+  const isCreated = await fetch(`${api}addresses`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(address),
+  })
+    .then(res => res.json())
+    .then(response => {
+      if (!response.ok) return showErrorDialog(response.msg);
+
+      return showSuccessDialog('Success', 'Address created successfully.');
+    })
+    .catch(err => showErrorDialog(err));
+
+  return isCreated;
+};
+
+export const showAddCompanyDialog = async (): Promise<boolean> => {
+  const { value: company } = await ReactSwal.fire({
+    title: 'New Company',
+    html: <CompanyForm swal={ReactSwal} />,
+    focusConfirm: false,
+    preConfirm: (): Company => ({
+      name: '' + (document.getElementById('swal-com-name') as HTMLInputElement).value,
+      catchPhrase: '' + (document.getElementById('swal-com-catchphrase') as HTMLInputElement).value,
+      bs: '' + (document.getElementById('swal-com-bs') as HTMLInputElement).value,
+    }),
+    showConfirmButton: false,
+    showCloseButton: true,
+  });
+
+  if (!company) return showWarningToast('Company not created.');
+
+  // Show loading Dialog
+  showLoadingDialog();
+
+  // Fetch create address API
+  const isCreated = await fetch(`${api}companies`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(company),
+  })
+    .then(res => res.json())
+    .then(response => {
+      if (!response.ok) return showErrorDialog(response.msg);
+
+      return showSuccessDialog('Success', 'Company created successfully.');
+    })
+    .catch(err => showErrorDialog(err));
+
+  return isCreated;
+};
